@@ -1,21 +1,17 @@
 server:
-  port: ${PORT:8080}
+  port: ${PORT:8085}
 
 spring:
   application:
     name: payment-gateway
   datasource:
-    url: jdbc:h2:file:./data/payment-gateway;MODE=PostgreSQL;AUTO_SERVER=TRUE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/payment_gateway}
+    username: ${DB_USERNAME:}
+    password: ${DB_PASSWORD:}
   jpa:
     hibernate:
       ddl-auto: update
     open-in-view: false
-  h2:
-    console:
-      enabled: true
 
 management:
   endpoints:

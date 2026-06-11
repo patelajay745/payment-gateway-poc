@@ -48,3 +48,6 @@ coverage
 .cache
 tmp
 temp
+
+CLAUDE.md
+Agents.md
