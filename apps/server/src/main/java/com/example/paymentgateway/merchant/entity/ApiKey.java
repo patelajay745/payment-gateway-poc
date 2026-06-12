@@ -1,4 +1,4 @@
-package com.example.paymentgateway.entity;
+package com.example.paymentgateway.merchant.entity;
 
 import com.example.paymentgateway.common.enums.Environment;
 import jakarta.persistence.*;

@@ -1,25 +1,27 @@
-package com.example.paymentgateway.entity;
+package com.example.paymentgateway.common.entity;
 
 import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class Money {
 	
-	private final int amountUnits;
+	private int amountUnits;
 	
-	private final String currency;
+	private String currency;
+	
+	protected Money() {
+	}
 	
 	private Money(int amountUnits, String currency) {
 		this.amountUnits = amountUnits;
 		this.currency = currency;
 	}
 	
-	public Money of(int amountUnits, String currency) {
-		
+	public static Money of(int amountUnits, String currency) {
 		return new Money(amountUnits, currency);
 	}
 	
-	public Money usd(int amountUnits) {
+	public static Money usd(int amountUnits) {
 		return new Money(amountUnits, "USD");
 	}
 	
