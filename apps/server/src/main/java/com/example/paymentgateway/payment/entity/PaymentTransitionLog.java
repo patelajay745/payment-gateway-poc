@@ -25,7 +25,7 @@ public class PaymentTransitionLog {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "to_status", length = 30, nullable = false)
-	private String toStatus;
+	private PaymentStatus toStatus;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "event", length = 30, nullable = false)

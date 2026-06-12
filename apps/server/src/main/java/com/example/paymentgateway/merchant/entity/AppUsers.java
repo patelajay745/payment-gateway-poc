@@ -2,8 +2,6 @@ package com.example.paymentgateway.merchant.entity;
 
 import com.example.paymentgateway.common.enums.UserRole;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -19,8 +17,6 @@ public class AppUsers {
 	private UUID id;
 	
 	@Column(nullable = false, unique = true)
-	@Email
-	@NotBlank
 	private String email;
 	
 	private String passwordHased;
