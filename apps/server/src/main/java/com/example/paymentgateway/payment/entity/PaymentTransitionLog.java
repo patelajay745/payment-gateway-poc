@@ -1,5 +1,6 @@
 package com.example.paymentgateway.payment.entity;
 
+import com.example.paymentgateway.common.enums.PaymentActor;
 import com.example.paymentgateway.common.enums.PaymentStatus;
 import jakarta.persistence.*;
 
@@ -30,8 +31,9 @@ public class PaymentTransitionLog {
 	@Column(name = "event", length = 30, nullable = false)
 	private PaymentStatus event;
 	
-	@Column(nullable = false, length = 100)
-	private String actor;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, length = 30)
+	private PaymentActor actor;
 	
 	@Column(nullable = false)
 	private String reason;
