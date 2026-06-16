@@ -3,6 +3,10 @@ package com.example.paymentgateway.merchant.entity;
 import com.example.paymentgateway.common.enums.BusinessType;
 import com.example.paymentgateway.common.enums.MerchantStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -11,6 +15,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "merchants")
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Merchant {
 	
 	@Id

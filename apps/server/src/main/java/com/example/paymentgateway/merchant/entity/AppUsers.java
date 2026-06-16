@@ -2,6 +2,10 @@ package com.example.paymentgateway.merchant.entity;
 
 import com.example.paymentgateway.common.enums.UserRole;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -10,6 +14,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "app_users")
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class AppUsers {
 	
 	@Id
@@ -19,7 +27,7 @@ public class AppUsers {
 	@Column(nullable = false, unique = true)
 	private String email;
 	
-	private String passwordHased;
+	private String passwordHashed;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
