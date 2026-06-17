@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v1/api/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 	
 	private final AuthService authService;
 	
-	@PostMapping("/signup")
+	@PostMapping("/")
 	public ResponseEntity<MerchantSignupResponse> registerUser(@RequestBody @Valid MerchantSignupRequest request) {
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(authService.registerMerchant(request));

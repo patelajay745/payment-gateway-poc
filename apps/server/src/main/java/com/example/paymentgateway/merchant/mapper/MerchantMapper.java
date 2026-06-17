@@ -22,5 +22,6 @@ public interface MerchantMapper extends BaseMapper<Merchant, MerchantSignupReque
 	Merchant toEntity(MerchantSignupRequest request);
 	
 	@Override
+	@Mapping(source = "status", target = "merchantStatus")
 	MerchantSignupResponse toResponse(Merchant entity);
 }
