@@ -2,12 +2,20 @@ package com.example.paymentgateway.merchant.entity;
 
 import com.example.paymentgateway.common.enums.Environment;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.UUID;
 
 @Entity
 @Table(name = "api_keys")
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ApiKey {
 	
 	@Id
@@ -29,6 +37,7 @@ public class ApiKey {
 	private Environment environment;
 	
 	@Column(nullable = false)
+	@Builder.Default
 	private boolean enabled = true;
 	
 	private Instant lastUsedAt;

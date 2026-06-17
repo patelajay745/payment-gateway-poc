@@ -1,12 +1,20 @@
 package com.example.paymentgateway.merchant.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.UUID;
 
 @Entity
 @Table(name = "merchant_webhook_config")
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class MerchantWebhookConfig {
 	
 	@Id

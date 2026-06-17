@@ -1,6 +1,10 @@
 package com.example.paymentgateway.merchant.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -9,6 +13,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "customers")
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Customer {
 	
 	@Id
