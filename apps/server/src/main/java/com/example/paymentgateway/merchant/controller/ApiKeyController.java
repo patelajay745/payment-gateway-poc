@@ -2,6 +2,7 @@ package com.example.paymentgateway.merchant.controller;
 
 import com.example.paymentgateway.merchant.dto.request.CreateApiKeyRequest;
 import com.example.paymentgateway.merchant.dto.response.CreateApiKeyResponse;
+import com.example.paymentgateway.merchant.dto.response.GetAllApiKeyResponse;
 import com.example.paymentgateway.merchant.service.ApiKeyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -29,6 +31,11 @@ public class ApiKeyController {
 	public ResponseEntity<CreateApiKeyResponse> createApiKeyUsingJsonData(@PathVariable UUID merchantId,
 	                                                                      @RequestBody @Valid CreateApiKeyRequest request) {
 		return createApiKey(merchantId, request);
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<GetAllApiKeyResponse>> getAllApiKeys(@PathVariable UUID merchantId) {
+		return ResponseEntity.status(200).body(apiKeyService.getAllApiKeys(merchantId));
 	}
 	
 	private ResponseEntity<CreateApiKeyResponse> createApiKey(UUID merchantId, CreateApiKeyRequest request) {
