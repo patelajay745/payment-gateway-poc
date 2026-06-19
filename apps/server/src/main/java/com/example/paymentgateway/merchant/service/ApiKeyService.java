@@ -13,4 +13,6 @@ public interface ApiKeyService {
 	CreateApiKeyResponse createApikey(UUID merchantId, @Valid CreateApiKeyRequest request);
 	
 	List<GetAllApiKeyResponse> getAllApiKeys(UUID merchantId);
+	
+	void revokeApiKeyId(UUID merchantId, UUID apiKeyId);
 }

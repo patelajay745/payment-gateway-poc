@@ -45,4 +45,12 @@ public class ApiKey {
 	private Instant rotatedAt;
 	
 	private Instant gracePeriodExpiresAt;
+	
+	public void disable() {
+		this.enabled = false;
+	}
+	
+	public void enable() {
+		this.enabled = true;
+	}
 }

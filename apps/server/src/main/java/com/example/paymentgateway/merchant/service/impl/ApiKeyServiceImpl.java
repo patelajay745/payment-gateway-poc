@@ -1,6 +1,7 @@
 package com.example.paymentgateway.merchant.service.impl;
 
 import com.example.paymentgateway.common.exception.ResourceNotFoundException;
+import com.example.paymentgateway.common.utils.RandomizerUtil;
 import com.example.paymentgateway.merchant.dto.request.CreateApiKeyRequest;
 import com.example.paymentgateway.merchant.dto.response.CreateApiKeyResponse;
 import com.example.paymentgateway.merchant.dto.response.GetAllApiKeyResponse;
@@ -35,9 +36,9 @@ public class ApiKeyServiceImpl implements ApiKeyService {
 	public CreateApiKeyResponse createApikey(UUID merchantId, CreateApiKeyRequest request) {
 		Merchant merchant = getMerchant(merchantId);
 		
-		String keyId = "pay" + request.environment().name().toUpperCase() + "big_random_string";
+		String keyId = "pay_" + request.environment().name() + RandomizerUtil.randomBase64(48);
 		
-		String rawSecret = "big_random_secret";
+		String rawSecret = RandomizerUtil.randomBase64(48);
 		
 		log.info("Creating Api key for merchant={}, environment={}", merchantId, request.environment());
 		
@@ -65,6 +66,17 @@ public class ApiKeyServiceImpl implements ApiKeyService {
 		
 		
 		return apiKeyMapper.toGetAllResponse(apiKeys);
+	}
+	
+	@Override
+	public void revokeApiKeyId(UUID merchantId, UUID apiKeyId) {
+		
+		ApiKey key =
+				apiKeyRepository.findByIdAndMerchantId(apiKeyId, merchantId)
+						.orElseThrow(() -> new ResourceNotFoundException(
+								"Apikey", apiKeyId.toString()));
+		
+		key.disable();
 	}
 	
 	private Merchant getMerchant(UUID merchantId) {

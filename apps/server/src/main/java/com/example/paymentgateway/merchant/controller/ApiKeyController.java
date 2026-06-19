@@ -41,4 +41,12 @@ public class ApiKeyController {
 	private ResponseEntity<CreateApiKeyResponse> createApiKey(UUID merchantId, CreateApiKeyRequest request) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(apiKeyService.createApikey(merchantId, request));
 	}
+	
+	@DeleteMapping("/{apiKeyId}")
+	public ResponseEntity<Void> revokeApikey(@PathVariable UUID merchantId, @PathVariable UUID apiKeyId) {
+		
+		apiKeyService.revokeApiKeyId(merchantId, apiKeyId);
+		
+		return ResponseEntity.status(204).build();
+	}
 }

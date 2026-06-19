@@ -49,6 +49,6 @@ public class GlobalExceptionHandler {
 		log.error("Unexpected error occurred", e);
 		return ResponseEntity
 				       .status(HttpStatus.INTERNAL_SERVER_ERROR)
-				       .body(ErrorResponse.of("INTERNAL_SERVER_ERROR", "An unexpected error occurred"));
+				       .body(ErrorResponse.of("INTERNAL_SERVER_ERROR", e.getMessage()));
 	}
 }
