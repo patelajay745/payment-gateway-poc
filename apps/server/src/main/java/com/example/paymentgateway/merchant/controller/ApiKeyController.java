@@ -49,4 +49,22 @@ public class ApiKeyController {
 		
 		return ResponseEntity.status(204).build();
 	}
+	
+	@PostMapping(path = "/{apiKeyId}/rotate", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<CreateApiKeyResponse> rotateKeyUsingJsonData(@PathVariable UUID merchantId,
+	                                                                   @PathVariable UUID apiKeyId) {
+		
+		return rotateKey(merchantId, apiKeyId);
+	}
+	
+	@PostMapping(path = "/{apiKeyId}/rotate", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	public ResponseEntity<CreateApiKeyResponse> rotateKeyUsingFormData(@PathVariable UUID merchantId,
+	                                                                   @PathVariable UUID apiKeyId) {
+		
+		return rotateKey(merchantId, apiKeyId);
+	}
+	
+	private ResponseEntity<CreateApiKeyResponse> rotateKey(UUID merchantId, UUID apiKeyId) {
+		return ResponseEntity.status(200).body(apiKeyService.rotate(merchantId, apiKeyId));
+	}
 }

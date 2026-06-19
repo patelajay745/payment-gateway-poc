@@ -29,8 +29,11 @@ public class ApiKey {
 	@Column(nullable = false, length = 50, unique = true)
 	private String keyId;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, length = 200)
 	private String keySecretHash;
+	
+	@Column(length = 200, nullable = true)
+	private String prevKeySecretHash;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
@@ -52,5 +55,21 @@ public class ApiKey {
 	
 	public void enable() {
 		this.enabled = true;
+	}
+	
+	public void setPrevKeySecretHash(String keyHash) {
+		this.prevKeySecretHash = keyHash;
+	}
+	
+	public void setKeySecretHash(String keyHash) {
+		this.keySecretHash = keyHash;
+	}
+	
+	public void setRotatedAt(Instant time) {
+		this.rotatedAt = time;
+	}
+	
+	public void setGracePeriodExpiresAt(Instant time) {
+		this.gracePeriodExpiresAt = time;
 	}
 }

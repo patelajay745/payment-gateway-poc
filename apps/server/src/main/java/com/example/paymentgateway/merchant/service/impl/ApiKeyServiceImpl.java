@@ -11,11 +11,15 @@ import com.example.paymentgateway.merchant.mapper.ApiKeyMapper;
 import com.example.paymentgateway.merchant.repository.ApiKeyRepository;
 import com.example.paymentgateway.merchant.repository.MerchantRepository;
 import com.example.paymentgateway.merchant.service.ApiKeyService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +37,7 @@ public class ApiKeyServiceImpl implements ApiKeyService {
 	private final ApiKeyMapper apiKeyMapper;
 	
 	@Override
+	@Transactional
 	public CreateApiKeyResponse createApikey(UUID merchantId, CreateApiKeyRequest request) {
 		Merchant merchant = getMerchant(merchantId);
 		
@@ -69,14 +74,34 @@ public class ApiKeyServiceImpl implements ApiKeyService {
 	}
 	
 	@Override
+	@Transactional
 	public void revokeApiKeyId(UUID merchantId, UUID apiKeyId) {
 		
-		ApiKey key =
-				apiKeyRepository.findByIdAndMerchantId(apiKeyId, merchantId)
-						.orElseThrow(() -> new ResourceNotFoundException(
-								"Apikey", apiKeyId.toString()));
+		ApiKey key = findApiKey(merchantId, apiKeyId);
 		
 		key.disable();
+	}
+	
+	@Override
+	
+	public CreateApiKeyResponse rotate(UUID merchantId, UUID apiKeyId) {
+		
+		ApiKey key = findApiKey(merchantId, apiKeyId);
+		
+		String newRawSecret = RandomizerUtil.randomBase64(48);
+		
+		key.setPrevKeySecretHash(key.getKeySecretHash());
+		
+		key.setKeySecretHash(passwordEncoder.encode(newRawSecret));
+		
+		key.setRotatedAt(LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC));
+		
+		key.setGracePeriodExpiresAt(
+				LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC).plus(Duration.ofHours(24)));
+		
+		ApiKey newApiKey = apiKeyRepository.save(key);
+		
+		return apiKeyMapper.toResponse(newApiKey, newRawSecret);
 	}
 	
 	private Merchant getMerchant(UUID merchantId) {
@@ -85,5 +110,11 @@ public class ApiKeyServiceImpl implements ApiKeyService {
 					log.warn("Merchant not found for merchantId={}", merchantId);
 					return new ResourceNotFoundException("Merchant", merchantId.toString());
 				});
+	}
+	
+	private ApiKey findApiKey(UUID merchantId, UUID apiKeyId) {
+		return apiKeyRepository.findByIdAndMerchantId(apiKeyId, merchantId)
+				       .orElseThrow(() -> new ResourceNotFoundException(
+						       "Apikey", apiKeyId.toString()));
 	}
 }
