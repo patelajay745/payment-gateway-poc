@@ -24,6 +24,9 @@ public class OrderRecord {
 	@Embedded
 	private Money amount;
 	
+	@Column(length = 100)
+	private String receipt;
+	
 	@Enumerated(EnumType.STRING)
 	@Column(length = 20, nullable = false)
 	private OrderStatus orderStatus = OrderStatus.CREATED;

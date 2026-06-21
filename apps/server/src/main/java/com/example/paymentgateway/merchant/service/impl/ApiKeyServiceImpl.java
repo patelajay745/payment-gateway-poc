@@ -11,11 +11,11 @@ import com.example.paymentgateway.merchant.mapper.ApiKeyMapper;
 import com.example.paymentgateway.merchant.repository.ApiKeyRepository;
 import com.example.paymentgateway.merchant.repository.MerchantRepository;
 import com.example.paymentgateway.merchant.service.ApiKeyService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -83,7 +83,7 @@ public class ApiKeyServiceImpl implements ApiKeyService {
 	}
 	
 	@Override
-	
+	@Transactional
 	public CreateApiKeyResponse rotate(UUID merchantId, UUID apiKeyId) {
 		
 		ApiKey key = findApiKey(merchantId, apiKeyId);
