@@ -3,6 +3,10 @@ package com.example.paymentgateway.payment.entity;
 import com.example.paymentgateway.common.entity.Money;
 import com.example.paymentgateway.common.enums.OrderStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -12,6 +16,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "order_records")
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class OrderRecord {
 	
 	@Id
@@ -29,9 +37,11 @@ public class OrderRecord {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(length = 20, nullable = false)
+	@Builder.Default
 	private OrderStatus orderStatus = OrderStatus.CREATED;
 	
 	@Column(nullable = false)
+	@Builder.Default
 	private Integer attempts = 0;
 	
 	@JdbcTypeCode(SqlTypes.JSON)
