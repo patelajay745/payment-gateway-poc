@@ -10,16 +10,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 @RequiredArgsConstructor
 @RequestMapping("/v1/orders")
 @RestController
 public class OrderController {
 	
 	private final OrderService orderService;
-	
-	UUID merchantId = UUID.fromString("cc2e1e71-ac5d-4ba4-8496-2e9c68145217");
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CreateOrderResponse> createOrderUsingJsonData(
@@ -34,6 +30,6 @@ public class OrderController {
 	}
 	
 	private ResponseEntity<CreateOrderResponse> createOrder(CreateOrderRequest request) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(orderService.createOrder(merchantId, request));
+		return ResponseEntity.status(HttpStatus.CREATED).body(orderService.createOrder(request));
 	}
 }
