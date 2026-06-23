@@ -1,5 +1,6 @@
 package com.example.paymentgateway.operations.entity;
 
+import com.example.paymentgateway.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SettlementPayment {
+public class SettlementPayment extends BaseEntity {
 	
 	@EmbeddedId
 	private SettlementPaymentId id;

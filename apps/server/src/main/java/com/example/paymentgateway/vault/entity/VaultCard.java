@@ -1,5 +1,6 @@
 package com.example.paymentgateway.vault.entity;
 
+import com.example.paymentgateway.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class VaultCard {
+public class VaultCard extends BaseEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)

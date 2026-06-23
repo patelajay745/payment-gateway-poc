@@ -1,5 +1,6 @@
 package com.example.paymentgateway.payment.entity;
 
+import com.example.paymentgateway.common.entity.BaseEntity;
 import com.example.paymentgateway.common.enums.PaymentActor;
 import com.example.paymentgateway.common.enums.PaymentStatus;
 import jakarta.persistence.*;
@@ -23,7 +24,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PaymentTransitionLog {
+public class PaymentTransitionLog extends BaseEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)

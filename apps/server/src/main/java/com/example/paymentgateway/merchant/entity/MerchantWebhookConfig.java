@@ -1,12 +1,12 @@
 package com.example.paymentgateway.merchant.entity;
 
+import com.example.paymentgateway.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -18,7 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MerchantWebhookConfig {
+public class MerchantWebhookConfig extends BaseEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -38,6 +38,4 @@ public class MerchantWebhookConfig {
 	
 	@Column(length = 200, nullable = false)
 	private String webhook_secret;
-	
-	private Instant createdAt;
 }

@@ -1,5 +1,6 @@
 package com.example.paymentgateway.operations.entity;
 
+import com.example.paymentgateway.common.entity.BaseEntity;
 import com.example.paymentgateway.common.enums.WebhookEventStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class WebhookEvent {
+public class WebhookEvent extends BaseEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)

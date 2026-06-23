@@ -1,5 +1,6 @@
 package com.example.paymentgateway.merchant.entity;
 
+import com.example.paymentgateway.common.entity.BaseEntity;
 import com.example.paymentgateway.common.enums.BusinessType;
 import com.example.paymentgateway.common.enums.MerchantStatus;
 import jakarta.persistence.*;
@@ -7,10 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
-import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -22,7 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Merchant {
+public class Merchant extends BaseEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -65,12 +63,4 @@ public class Merchant {
 	private String settlementIfsc;
 	
 	private String createdBy;
-	
-	@Column(updatable = false)
-	@CreatedDate
-	private Instant createdAt;
-	
-	@Column(updatable = false)
-	@UpdateTimestamp
-	private Instant updatedAt;
 }

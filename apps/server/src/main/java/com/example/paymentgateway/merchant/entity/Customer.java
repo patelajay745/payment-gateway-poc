@@ -1,12 +1,11 @@
 package com.example.paymentgateway.merchant.entity;
 
+import com.example.paymentgateway.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -22,7 +21,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Customer {
+public class Customer extends BaseEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -42,14 +41,6 @@ public class Customer {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "merchant_id", nullable = false)
 	private Merchant merchant;
-	
-	@Column(updatable = false)
-	@CreatedDate
-	private Instant createdAt;
-	
-	@Column(updatable = false)
-	@UpdateTimestamp
-	private Instant updatedAt;
 	
 	private Instant deletedAt;
 }
