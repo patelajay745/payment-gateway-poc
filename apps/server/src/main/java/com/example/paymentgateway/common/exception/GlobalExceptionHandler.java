@@ -20,6 +20,13 @@ public class GlobalExceptionHandler {
 				       .body(ErrorResponse.of(e.getErrorCode(), e.getMessage()));
 	}
 	
+	@ExceptionHandler(BusinessRuleViolationException.class)
+	public ResponseEntity<ErrorResponse> handleBusinessRuleViolationException(BusinessRuleViolationException e) {
+		return ResponseEntity
+				       .status(HttpStatus.CONFLICT)
+				       .body(ErrorResponse.of(e.getErrorCode(), e.getMessage()));
+	}
+	
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException e) {
 		

@@ -2,7 +2,7 @@ package com.example.paymentgateway.config;
 
 import com.example.paymentgateway.merchant.mapper.ApiKeyMapper;
 import com.example.paymentgateway.merchant.mapper.MerchantMapper;
-import com.example.paymentgateway.payment.mapper.CreateOrderMapper;
+import com.example.paymentgateway.payment.mapper.OrderMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +28,7 @@ public class AppConfig {
 	}
 	
 	@Bean
-	public CreateOrderMapper createOrderMapper() {
-		return Mappers.getMapper(CreateOrderMapper.class);
+	public OrderMapper createOrderMapper() {
+		return Mappers.getMapper(OrderMapper.class);
 	}
 }

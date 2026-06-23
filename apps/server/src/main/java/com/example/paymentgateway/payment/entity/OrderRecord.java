@@ -50,4 +50,8 @@ public class OrderRecord {
 	
 	@Column(nullable = false)
 	private Instant expires;
+	
+	public void updateOrderStatus(OrderStatus orderStatus) {
+		this.orderStatus = orderStatus;
+	}
 }
