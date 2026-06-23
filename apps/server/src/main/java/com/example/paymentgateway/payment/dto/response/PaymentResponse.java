@@ -21,24 +21,15 @@ public record PaymentResponse(
 		
 		Map<String, Object> methodDetails,
 		
-		String cardLastFour,
-		
-		String cardBrand,
-		
 		PaymentMethod method,
-		
-		String bankReference,
 		
 		String errorCode,
 		
 		String errorDescription,
 		
-		String refundedAmount,
-		
 		Instant capturedAt,
 		
 		Instant createdAt
-
 
 ) {
 

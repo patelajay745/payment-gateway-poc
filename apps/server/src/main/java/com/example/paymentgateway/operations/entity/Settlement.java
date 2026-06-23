@@ -3,12 +3,20 @@ package com.example.paymentgateway.operations.entity;
 import com.example.paymentgateway.common.entity.Money;
 import com.example.paymentgateway.common.enums.SettlementStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.UUID;
 
 @Entity
 @Table(name = "card_token")
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Settlement {
 	
 	@Id

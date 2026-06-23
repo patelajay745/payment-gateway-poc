@@ -2,6 +2,10 @@ package com.example.paymentgateway.operations.entity;
 
 import com.example.paymentgateway.common.enums.WebhookEventStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -11,6 +15,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "webhook_event")
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class WebhookEvent {
 	
 	@Id

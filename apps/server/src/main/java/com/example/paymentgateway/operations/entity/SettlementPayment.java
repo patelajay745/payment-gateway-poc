@@ -1,9 +1,17 @@
 package com.example.paymentgateway.operations.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "settlement_payment")
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class SettlementPayment {
 	
 	@EmbeddedId

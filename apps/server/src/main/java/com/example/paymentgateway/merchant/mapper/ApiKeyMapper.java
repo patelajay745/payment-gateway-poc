@@ -1,17 +1,16 @@
 package com.example.paymentgateway.merchant.mapper;
 
-import com.example.paymentgateway.common.mapper.BaseMapper;
-import com.example.paymentgateway.merchant.dto.request.CreateApiKeyRequest;
 import com.example.paymentgateway.merchant.dto.response.CreateApiKeyResponse;
 import com.example.paymentgateway.merchant.dto.response.GetAllApiKeyResponse;
 import com.example.paymentgateway.merchant.entity.ApiKey;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 
 import java.util.List;
 
-@Mapper
-public interface ApiKeyMapper extends BaseMapper<ApiKey, CreateApiKeyRequest, CreateApiKeyResponse> {
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public interface ApiKeyMapper {
 	
 	@Mapping(target = "keySecret", source = "rawSecret")
 	CreateApiKeyResponse toResponse(ApiKey apiKey, String rawSecret);

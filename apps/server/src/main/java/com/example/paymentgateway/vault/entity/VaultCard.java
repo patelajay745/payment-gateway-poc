@@ -1,12 +1,20 @@
 package com.example.paymentgateway.vault.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.UUID;
 
 @Entity
 @Table(name = "vault_card")
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class VaultCard {
 	
 	@Id

@@ -4,6 +4,10 @@ import com.example.paymentgateway.common.entity.Money;
 import com.example.paymentgateway.common.enums.PaymentMethod;
 import com.example.paymentgateway.common.enums.PaymentStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -13,6 +17,10 @@ import java.util.UUID;
 
 @Table(name = "payments")
 @Entity
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Payment {
 	
 	@Id
@@ -24,7 +32,7 @@ public class Payment {
 	private OrderRecord order;
 	
 	@Column(nullable = false)
-	private UUID merchandId;
+	private UUID merchantId;
 	
 	@Embedded
 	private Money amount;
