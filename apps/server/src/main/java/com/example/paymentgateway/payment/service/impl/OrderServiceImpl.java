@@ -90,11 +90,11 @@ public class OrderServiceImpl implements OrderService {
 	}
 	
 	@Override
-	public PaymentResponse listPayments(UUID orderId) {
+	public List<PaymentResponse> listPayments(UUID orderId) {
 		OrderRecord order = getOrder(orderId);
 		
 		List<Payment> paymentList = paymentRepository.findByOrderId(order.getId());
-		return null;
+		return orderMapper.toPaymentResponseList(paymentList);
 	}
 	
 	private void checkMerchantIdAndReceipt(UUID merchantId, String receipt) {

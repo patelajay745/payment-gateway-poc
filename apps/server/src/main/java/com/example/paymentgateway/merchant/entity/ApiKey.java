@@ -11,7 +11,10 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "api_keys")
+@Table(name = "api_keys",
+		indexes = {
+				@Index(name = "idx_api_key_merchant_id_env", columnList = "merchant_id,environment,enabled")
+		})
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor

@@ -10,7 +10,10 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "merchant_webhook_config")
+@Table(name = "merchant_webhook_config",
+		indexes = {
+				@Index(name = "idx_webhook_merchant_id", columnList = "merchant_id")
+		})
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor

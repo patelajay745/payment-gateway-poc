@@ -9,6 +9,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 
+import java.util.List;
+
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface OrderMapper {
 	
@@ -21,4 +23,8 @@ public interface OrderMapper {
 	@Mapping(target = "orderId", source = "order.id")
 	@Mapping(target = "paymentStatus", source = "status")
 	PaymentResponse toPaymentResponse(Payment payment);
+	
+	@Mapping(target = "orderId", source = "order.id")
+	@Mapping(target = "paymentStatus", source = "status")
+	List<PaymentResponse> toPaymentResponseList(List<Payment> payment);
 }

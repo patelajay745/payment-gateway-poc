@@ -15,7 +15,11 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
 
-@Table(name = "payments")
+@Table(name = "payments",
+		indexes = {
+				@Index(name = "idx_payment_order", columnList = "order_id"),
+				@Index(name = "idx_payment_merchant", columnList = "merchant_id")
+		})
 @Entity
 @Getter
 @AllArgsConstructor

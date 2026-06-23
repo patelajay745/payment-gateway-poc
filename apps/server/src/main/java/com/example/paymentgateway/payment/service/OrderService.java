@@ -4,6 +4,7 @@ import com.example.paymentgateway.payment.dto.request.CreateOrderRequest;
 import com.example.paymentgateway.payment.dto.response.OrderResponse;
 import com.example.paymentgateway.payment.dto.response.PaymentResponse;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface OrderService {
@@ -14,5 +15,5 @@ public interface OrderService {
 	
 	void cancelOrder(UUID orderId);
 	
-	PaymentResponse listPayments(UUID orderId);
+	List<PaymentResponse> listPayments(UUID orderId);
 }

@@ -12,7 +12,13 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "payment_transition_logs")
+@Table(name = "payment_transition_logs",
+		indexes = {
+				@Index(
+						name = "idx_payment_log_payment_id",
+						columnList = "payment_id"
+				)
+		})
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor

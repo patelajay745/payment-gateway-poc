@@ -14,7 +14,10 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "merchants")
+@Table(name = "merchants",
+		indexes = {
+				@Index(name = "idx_merchant_status", columnList = "status")
+		})
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor

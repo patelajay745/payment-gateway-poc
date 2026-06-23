@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -44,7 +45,7 @@ public class OrderController {
 	}
 	
 	@PostMapping("/{orderId}/payments")
-	public ResponseEntity<PaymentResponse> listPayments(@PathVariable UUID orderId) {
+	public ResponseEntity<List<PaymentResponse>> listPayments(@PathVariable UUID orderId) {
 		return ResponseEntity.status(HttpStatus.OK).body(orderService.listPayments(orderId));
 	}
 	
