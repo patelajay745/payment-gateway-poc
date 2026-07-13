@@ -4,8 +4,7 @@ import com.example.paymentgateway.common.enums.OrderStatus;
 import com.example.paymentgateway.common.exception.BusinessRuleViolationException;
 import com.example.paymentgateway.common.exception.DuplicateResourceException;
 import com.example.paymentgateway.common.exception.ResourceNotFoundException;
-import com.example.paymentgateway.common.security.MerchantPrincipal;
-import com.example.paymentgateway.merchant.entity.Merchant;
+import com.example.paymentgateway.common.utils.Utils;
 import com.example.paymentgateway.payment.dto.request.CreateOrderRequest;
 import com.example.paymentgateway.payment.dto.response.OrderResponse;
 import com.example.paymentgateway.payment.dto.response.PaymentResponse;
@@ -18,7 +17,6 @@ import com.example.paymentgateway.payment.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,11 +40,20 @@ public class OrderServiceImpl implements OrderService {
 	@Value("${payment.order.default-order-expiry-minutes:30}")
 	private int defaultOrderExpiryMinutes;
 	
+	public OrderRecord getOrder(UUID orderId) {
+		UUID merchantId = Utils.getCurrentMerchant().getId();
+		
+		return orderRepository.findByIdAndMerchantId(orderId, merchantId)
+				       .orElseThrow(
+						       () -> new ResourceNotFoundException("ORDER",
+								       "Order with " + orderId + " not found"));
+	}
+	
 	@Override
 	public OrderResponse createOrder(CreateOrderRequest request) {
 		
 		
-		UUID merchantId = getCurrentMerchant().getId();
+		UUID merchantId = Utils.getCurrentMerchant().getId();
 		
 		
 		checkMerchantIdAndReceipt(merchantId, request.receipt());
@@ -102,22 +109,5 @@ public class OrderServiceImpl implements OrderService {
 		if (receipt != null && orderRepository.existsByMerchantIdAndReceipt(merchantId, receipt)) {
 			throw new DuplicateResourceException("Order_Receipt_Duplicate", "Order with receipt already exists");
 		}
-	}
-	
-	private Merchant getCurrentMerchant() {
-		MerchantPrincipal principal =
-				(MerchantPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
-		assert principal != null;
-		return principal.getMerchant();
-	}
-	
-	private OrderRecord getOrder(UUID orderId) {
-		UUID merchantId = getCurrentMerchant().getId();
-		
-		return orderRepository.findByIdAndMerchantId(orderId, merchantId)
-				       .orElseThrow(
-						       () -> new ResourceNotFoundException("ORDER",
-								       "Order with " + orderId + " not found"));
 	}
 }

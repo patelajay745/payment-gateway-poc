@@ -59,4 +59,8 @@ public class OrderRecord extends BaseEntity {
 	public void updateOrderStatus(OrderStatus orderStatus) {
 		this.orderStatus = orderStatus;
 	}
+	
+	public void setAttempts(int attempts) {
+		this.attempts = attempts;
+	}
 }

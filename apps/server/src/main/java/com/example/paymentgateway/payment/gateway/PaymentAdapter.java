@@ -1,4 +1,9 @@
 package com.example.paymentgateway.payment.gateway;
 
-public class PaymentAdapter {
+import com.example.paymentgateway.payment.gateway.dto.PaymentRequest;
+import com.example.paymentgateway.payment.gateway.dto.PaymentResult;
+
+public interface PaymentAdapter {
+	
+	PaymentResult initiate(PaymentRequest request);
 }

@@ -55,6 +55,9 @@ public class Payment extends BaseEntity {
 	@Column(length = 100)
 	private String bankReference;
 	
+	@Column(length = 100)
+	private String paymentProcessorReference;
+	
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "method_details", columnDefinition = "jsonb")
 	private Map<String, Object> methodDetails;
@@ -74,4 +77,20 @@ public class Payment extends BaseEntity {
 	private Instant refundedAt;
 	
 	private Instant settledAt;
+	
+	public void updateStaus(PaymentStatus status) {
+		this.status = status;
+	}
+	
+	public void setErrorCode(String s) {
+		this.errorCode = s;
+	}
+	
+	public void setErrorDescription(String s) {
+		this.errorDescription = s;
+	}
+	
+	public void setPaymentProcessorReference(String s) {
+		this.paymentProcessorReference = s;
+	}
 }
