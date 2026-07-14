@@ -17,11 +17,15 @@ public class PaymentAdapterConfig {
 	
 	private final NetBankingAdapter netBankingAdapter;
 	
+	private final CardPaymentAdapter cardPaymentAdapter;
+	
+	private final UpiPaymentAdapter upiPaymentAdapter;
+	
 	@Bean
 	public Map<PaymentMethod, PaymentAdapter> paymentAdapters() {
-		return Map.of(PaymentMethod.CARD, new CardPaymentAdapter(),
+		return Map.of(PaymentMethod.CARD, cardPaymentAdapter,
 				PaymentMethod.NETBANKING, netBankingAdapter,
-				PaymentMethod.UPI, new UpiPaymentAdapter()
+				PaymentMethod.UPI, upiPaymentAdapter
 		);
 	}
 }

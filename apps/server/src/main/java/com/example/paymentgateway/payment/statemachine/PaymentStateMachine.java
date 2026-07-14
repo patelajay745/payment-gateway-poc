@@ -1,0 +1,67 @@
+package com.example.paymentgateway.payment.statemachine;
+
+import com.example.paymentgateway.common.enums.PaymentEvent;
+import com.example.paymentgateway.common.enums.PaymentStatus;
+import com.example.paymentgateway.common.exception.InvalidStateTransitionException;
+import org.springframework.stereotype.Component;
+
+import java.util.Map;
+
+@Component
+public class PaymentStateMachine {
+	
+	private static final Map<Transition, PaymentStatus> TRANSITION =
+			Map.ofEntries(
+					Map.entry(new Transition(PaymentStatus.CREATED, PaymentEvent.AUTHORIZED_ATTEMPT),
+							PaymentStatus.AUTHORIZING),
+					
+					Map.entry(new Transition(PaymentStatus.AUTHORIZING, PaymentEvent.AUTHORIZED_SUCCESS),
+							PaymentStatus.AUTHORIZED),
+					
+					Map.entry(new Transition(PaymentStatus.AUTHORIZING, PaymentEvent.AUTHORIZED_FAIL),
+							PaymentStatus.FAILED),
+					
+					Map.entry(new Transition(PaymentStatus.AUTHORIZED, PaymentEvent.CAPTURED_REQUEST),
+							PaymentStatus.CAPTURING),
+					
+					Map.entry(new Transition(PaymentStatus.CAPTURING, PaymentEvent.CAPTURED_SUCCESS),
+							PaymentStatus.CAPTURED),
+					
+					Map.entry(new Transition(PaymentStatus.CAPTURING, PaymentEvent.CAPTURED_FAIL),
+							PaymentStatus.AUTHORIZED),
+					
+					Map.entry(new Transition(PaymentStatus.CAPTURED, PaymentEvent.REFUND_INIT),
+							PaymentStatus.PARTIALLY_REFUNDED),
+					
+					Map.entry(new Transition(PaymentStatus.CREATED, PaymentEvent.CANCEL),
+							PaymentStatus.CANCELED),
+					
+					Map.entry(new Transition(PaymentStatus.AUTHORIZING, PaymentEvent.CANCEL),
+							PaymentStatus.CANCELED),
+					
+					Map.entry(new Transition(PaymentStatus.AUTHORIZED, PaymentEvent.CAPTURE_TIMEOUT),
+							PaymentStatus.AUTH_EXPIRED),
+					
+					
+					Map.entry(new Transition(PaymentStatus.CAPTURED, PaymentEvent.SETTLE),
+							PaymentStatus.SETTLED)
+			
+			
+			);
+	
+	public PaymentStatus transition(PaymentStatus current, PaymentEvent event) {
+		PaymentStatus next = TRANSITION.get(new Transition(current, event));
+		
+		if (next == null) {
+			throw new InvalidStateTransitionException(current.name(), event.name());
+		}
+		
+		return next;
+	}
+	
+	private record Transition(PaymentStatus from,
+	                          
+	                          PaymentEvent event) {
+		
+	}
+}

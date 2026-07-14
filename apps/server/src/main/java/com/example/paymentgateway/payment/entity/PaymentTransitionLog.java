@@ -2,6 +2,7 @@ package com.example.paymentgateway.payment.entity;
 
 import com.example.paymentgateway.common.entity.BaseEntity;
 import com.example.paymentgateway.common.enums.PaymentActor;
+import com.example.paymentgateway.common.enums.PaymentEvent;
 import com.example.paymentgateway.common.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -44,7 +45,7 @@ public class PaymentTransitionLog extends BaseEntity {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "event", length = 30, nullable = false)
-	private PaymentStatus event;
+	private PaymentEvent event;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 30)

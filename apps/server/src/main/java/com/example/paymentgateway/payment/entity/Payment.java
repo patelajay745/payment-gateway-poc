@@ -5,10 +5,7 @@ import com.example.paymentgateway.common.entity.Money;
 import com.example.paymentgateway.common.enums.PaymentMethod;
 import com.example.paymentgateway.common.enums.PaymentStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -23,6 +20,7 @@ import java.util.UUID;
 		})
 @Entity
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -77,20 +75,4 @@ public class Payment extends BaseEntity {
 	private Instant refundedAt;
 	
 	private Instant settledAt;
-	
-	public void updateStaus(PaymentStatus status) {
-		this.status = status;
-	}
-	
-	public void setErrorCode(String s) {
-		this.errorCode = s;
-	}
-	
-	public void setErrorDescription(String s) {
-		this.errorDescription = s;
-	}
-	
-	public void setPaymentProcessorReference(String s) {
-		this.paymentProcessorReference = s;
-	}
 }
