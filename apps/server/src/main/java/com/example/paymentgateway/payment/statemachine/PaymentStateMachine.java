@@ -33,6 +33,9 @@ public class PaymentStateMachine {
 					Map.entry(new Transition(PaymentStatus.CAPTURED, PaymentEvent.REFUND_INIT),
 							PaymentStatus.PARTIALLY_REFUNDED),
 					
+					Map.entry(new Transition(PaymentStatus.PARTIALLY_REFUNDED, PaymentEvent.REFUND_COMPLETE),
+							PaymentStatus.REFUNDED),
+					
 					Map.entry(new Transition(PaymentStatus.CREATED, PaymentEvent.CANCEL),
 							PaymentStatus.CANCELED),
 					
@@ -43,8 +46,8 @@ public class PaymentStateMachine {
 							PaymentStatus.AUTH_EXPIRED),
 					
 					
-					Map.entry(new Transition(PaymentStatus.CAPTURED, PaymentEvent.SETTLE),
-							PaymentStatus.SETTLED)
+					Map.entry(new Transition(PaymentStatus.SETTLED, PaymentEvent.REFUND_INIT),
+							PaymentStatus.PARTIALLY_REFUNDED)
 			
 			
 			);
