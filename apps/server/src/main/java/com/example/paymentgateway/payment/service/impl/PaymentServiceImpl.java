@@ -112,7 +112,7 @@ public class PaymentServiceImpl implements PaymentService {
 	public PaymentResponse capture(UUID paymentId) {
 		Merchant merchant = Utils.getCurrentMerchant();
 		Payment payment =
-				paymentRepository.findByIDAndMerchantId(paymentId, merchant.getId())
+				paymentRepository.findByIdAndMerchantId(paymentId, merchant.getId())
 						.orElseThrow(() -> new ResourceNotFoundException("Payment", paymentId.toString()));
 		
 		paymentTransitionService.apply(payment, PaymentEvent.CAPTURED_REQUEST);

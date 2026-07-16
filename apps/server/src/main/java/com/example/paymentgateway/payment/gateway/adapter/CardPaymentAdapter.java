@@ -3,9 +3,15 @@ package com.example.paymentgateway.payment.gateway.adapter;
 import com.example.paymentgateway.payment.gateway.PaymentAdapter;
 import com.example.paymentgateway.payment.gateway.dto.PaymentRequest;
 import com.example.paymentgateway.payment.gateway.dto.PaymentResult;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+@Component
+@Slf4j
+@RequiredArgsConstructor
 public class CardPaymentAdapter implements PaymentAdapter {
 	
 	@Override

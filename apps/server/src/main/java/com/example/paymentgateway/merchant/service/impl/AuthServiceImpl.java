@@ -1,5 +1,6 @@
 package com.example.paymentgateway.merchant.service.impl;
 
+import com.example.paymentgateway.common.enums.BusinessType;
 import com.example.paymentgateway.common.enums.UserRole;
 import com.example.paymentgateway.common.exception.DuplicateResourceException;
 import com.example.paymentgateway.merchant.dto.request.MerchantSignupRequest;
@@ -38,8 +39,15 @@ public class AuthServiceImpl implements AuthService {
 					"Merchant with email already exists: " + request.email());
 		}
 		
+		Merchant merchantToSave = Merchant
+				                          .builder()
+				                          .name(request.name())
+				                          .email(request.email())
+				                          .businessName(request.businessName())
+				                          .businessType(BusinessType.valueOf(request.businessType()))
+				                          .build();
 		
-		Merchant savedMerchant = merchantRepository.save(merchantMapper.toEntity(request));
+		Merchant savedMerchant = merchantRepository.save(merchantToSave);
 		
 		AppUsers appUser = AppUsers
 				                   .builder()

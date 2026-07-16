@@ -12,6 +12,7 @@ import java.time.Instant;
 @MappedSuperclass
 @Getter
 @EntityListeners(AuditingEntityListener.class)
+
 public class BaseEntity {
 	
 	@CreationTimestamp
