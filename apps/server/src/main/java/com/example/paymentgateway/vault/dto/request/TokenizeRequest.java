@@ -26,7 +26,11 @@ public record TokenizeRequest(
 		@ExpiryYear(message = "Expiry year must not be in the past")
 		Integer expiryYear,
 		
-		UUID customerId
+		UUID customerId,
+		
+		@NotBlank(message = "Card holder name is required")
+		@Min(value = 3, message = "Card holder name must be between 1 to 12")
+		String cardHolderName
 
 
 ) {

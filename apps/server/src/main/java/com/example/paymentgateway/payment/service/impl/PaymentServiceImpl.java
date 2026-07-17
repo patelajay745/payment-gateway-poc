@@ -96,7 +96,8 @@ public class PaymentServiceImpl implements PaymentService {
 				payment.setErrorDescription(failer.errorDescription());
 			}
 			case PaymentResult.Success success -> {
-			
+				log.warn("Invalid state");
+				return null;
 			}
 		}
 		

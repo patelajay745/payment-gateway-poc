@@ -1,6 +1,7 @@
 package com.example.paymentgateway.vault.entity;
 
 import com.example.paymentgateway.common.entity.BaseEntity;
+import com.example.paymentgateway.common.enums.CardBrand;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,13 +36,13 @@ public class VaultCard extends BaseEntity {
 	private byte[] encryptedDek;
 	
 	@Column(nullable = false)
-	private String brand;
+	private CardBrand brand;
 	
 	@Column(nullable = false)
-	private String expiryMonth;
+	private Integer expiryMonth;
 	
 	@Column(nullable = false)
-	private String expiryYear;
+	private Integer expiryYear;
 	
 	@Column(nullable = false)
 	private String cardHolderName;

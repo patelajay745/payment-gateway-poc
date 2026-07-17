@@ -18,3 +18,24 @@ management:
     web:
       exposure:
         include: health,info,metrics
+vault:
+  master-key: kljashgiughawwrbgtuiasrfawer9rwetgjurwbtg89wkjgbaslkasdgnokl
+
+payment:
+  simulator:
+    poll-interval-ms: 5000
+    chaos-mode: NORMAL
+    methods:
+      CARD:
+        min-delay-seconds: 2
+        max-delay-seconds: 6
+        success-rate: 90
+      NETBANKING:
+        min-delay-seconds: 4
+        max-delay-seconds: 10
+        success-rate: 80
+      UPI:
+        min-delay-seconds: 1
+        max-delay-seconds: 3
+        success-rate: 95
+
