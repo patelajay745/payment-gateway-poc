@@ -1,4 +1,16 @@
 services:
+  #  app:
+  #    build:
+  #      context: .
+  #      no_cache: true
+  #    container_name: payment-gateway-be
+  #    env_file:
+  #      - .env
+  #    ports:
+  #      - "8085:8085"
+  #    depends_on:
+  #      - postgres
+  #    restart: unless-stopped
   postgres:
     image: postgres:15
     ports:

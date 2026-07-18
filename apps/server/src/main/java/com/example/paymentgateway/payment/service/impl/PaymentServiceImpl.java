@@ -136,4 +136,39 @@ public class PaymentServiceImpl implements PaymentService {
 		
 		return paymentMapper.toResponse(payment);
 	}
+	
+	@Override
+	public void resolveAuthorization(UUID paymentId, boolean approve, String bankRef, String errorCode,
+	                                 String errorDescription) {
+		
+		Payment payment = paymentRepository.findById(paymentId)
+				                  .orElseThrow(() -> new ResourceNotFoundException("Payment", paymentId.toString()));
+		
+		if (payment.getStatus() != PaymentStatus.AUTHORIZING) {
+			log.warn("Payment is not in Authorizing state, paymentId : {} , status : {}", paymentId,
+					payment.getStatus());
+			
+			return;
+		}
+		
+		OrderRecord order = payment.getOrder();
+		
+		if (approve) {
+			paymentTransitionService.apply(payment, PaymentEvent.AUTHORIZED_SUCCESS);
+			payment.setBankReference(bankRef);
+			payment.setAuthorizedAt(Instant.now());
+			
+			paymentTransitionService.apply(payment, PaymentEvent.CAPTURED_REQUEST);
+			
+			PaymentResult paymentResult = paymentGatewayRouter.capture(payment.getMethod(), paymentId);
+			
+			if (paymentResult instanceof PaymentResult.Success success) {
+				paymentTransitionService.apply(payment, PaymentEvent.CAPTURED_SUCCESS);
+			} else {
+				paymentTransitionService.apply(payment, PaymentEvent.CAPTURED_FAIL);
+			}
+		} else {
+		
+		}
+	}
 }

@@ -1,0 +1,25 @@
+# Build artifacts
+target/
+
+# IDE / tooling
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+
+# Local env & secrets
+.env
+.env.*
+!.env.example
+
+# VCS
+.git/
+.gitignore
+.gitattributes
+
+# Local runtime data
+data/
+
+# Docs / CI configs that don't belong in the image
+*.md

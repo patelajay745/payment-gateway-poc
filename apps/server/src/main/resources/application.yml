@@ -19,7 +19,7 @@ management:
       exposure:
         include: health,info,metrics
 vault:
-  master-key: kljashgiughawwrbgtuiasrfawer9rwetgjurwbtg89wkjgbaslkasdgnokl
+  master-key: ${VAULT_MASTER_KEY:}
 
 payment:
   simulator:
