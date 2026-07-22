@@ -5,8 +5,8 @@ import com.example.paymentgateway.common.enums.PaymentEvent;
 import com.example.paymentgateway.common.enums.PaymentStatus;
 import com.example.paymentgateway.common.exception.BusinessRuleViolationException;
 import com.example.paymentgateway.common.exception.ResourceNotFoundException;
-import com.example.paymentgateway.common.utils.Utils;
 import com.example.paymentgateway.merchant.entity.Merchant;
+import com.example.paymentgateway.merchant.repository.MerchantRepository;
 import com.example.paymentgateway.payment.dto.request.PaymentInitRequest;
 import com.example.paymentgateway.payment.dto.response.PaymentResponse;
 import com.example.paymentgateway.payment.entity.OrderRecord;
@@ -42,11 +42,19 @@ public class PaymentServiceImpl implements PaymentService {
 	
 	private final PaymentTransitionService paymentTransitionService;
 	
+	private final MerchantRepository merchantRepository;
+	
+	private Merchant getMerchant(UUID merchantId) {
+		return merchantRepository.findById(merchantId)
+				       .orElseThrow(() -> new ResourceNotFoundException("MERCHANT", "merchant not found"));
+	}
+	
 	@Override
 	@Transactional
 	public PaymentResponse initiate(PaymentInitRequest request) {
-		
-		Merchant merchant = Utils.getCurrentMerchant();
+
+//		Merchant merchant = Utils.getCurrentMerchant();
+		Merchant merchant = getMerchant(UUID.fromString("e51aedc1-95e7-443b-953b-168054c85058"));
 		
 		OrderRecord order = orderRepository.findByIdAndMerchantId(request.orderId(), merchant.getId())
 				                    .orElseThrow(
@@ -85,14 +93,13 @@ public class PaymentServiceImpl implements PaymentService {
 				                                .build();
 		
 		
+		paymentTransitionService.apply(payment, PaymentEvent.AUTHORIZED_ATTEMPT, "Payment initiation");
 		PaymentResult result = paymentGatewayRouter.initiate(paymentRequest);
-		
-		
+
 		switch (result) {
 			case PaymentResult.Pending pending -> payment.setPaymentProcessorReference(pending.registrationRef());
 			case PaymentResult.Failure failer -> {
-//				payment.setStatus(PaymentStatus.FAILED);
-				paymentTransitionService.apply(payment, PaymentEvent.AUTHORIZED_FAIL);
+				paymentTransitionService.apply(payment, PaymentEvent.AUTHORIZED_FAIL, "Gateway authorization failed");
 				payment.setErrorCode(failer.errorCode());
 				payment.setErrorDescription(failer.errorDescription());
 			}
@@ -112,22 +119,22 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	@Transactional
 	public PaymentResponse capture(UUID paymentId) {
-		Merchant merchant = Utils.getCurrentMerchant();
+		Merchant merchant = getMerchant(UUID.fromString("e51aedc1-95e7-443b-953b-168054c85058"));
 		Payment payment =
 				paymentRepository.findByIdAndMerchantId(paymentId, merchant.getId())
 						.orElseThrow(() -> new ResourceNotFoundException("Payment", paymentId.toString()));
 		
-		paymentTransitionService.apply(payment, PaymentEvent.CAPTURED_REQUEST);
-		
+		paymentTransitionService.apply(payment, PaymentEvent.CAPTURED_REQUEST, "Merchant capture request");
+
 		PaymentResult paymentResult =
 				paymentGatewayRouter.capture(payment.getMethod(), paymentId);
-		
+
 		if (paymentResult instanceof PaymentResult.Success success) {
-			paymentTransitionService.apply(payment, PaymentEvent.CAPTURED_SUCCESS);
+			paymentTransitionService.apply(payment, PaymentEvent.CAPTURED_SUCCESS, "Capture succeeded");
 			payment.setCapturedAt(Instant.now());
 			log.info("Payment captured , paymentId : {}", paymentId);
 		} else if (paymentResult instanceof PaymentResult.Failure failure) {
-			paymentTransitionService.apply(payment, PaymentEvent.CAPTURED_FAIL);
+			paymentTransitionService.apply(payment, PaymentEvent.CAPTURED_FAIL, "Capture failed");
 			payment.setErrorCode(failure.errorCode());
 			payment.setErrorDescription(failure.errorDescription());
 			log.warn("Payment capture failed, paymentId : {}", paymentId);
@@ -156,26 +163,25 @@ public class PaymentServiceImpl implements PaymentService {
 		OrderRecord order = payment.getOrder();
 		
 		if (approve) {
-			paymentTransitionService.apply(payment, PaymentEvent.AUTHORIZED_SUCCESS);
+			paymentTransitionService.apply(payment, PaymentEvent.AUTHORIZED_SUCCESS, "Bank authorization approved");
 			payment.setBankReference(bankRef);
 			payment.setAuthorizedAt(Instant.now());
-			
-			paymentTransitionService.apply(payment, PaymentEvent.CAPTURED_REQUEST);
-			
+
+			paymentTransitionService.apply(payment, PaymentEvent.CAPTURED_REQUEST, "Auto-capture on authorization");
+
 			PaymentResult paymentResult = paymentGatewayRouter.capture(payment.getMethod(), paymentId);
-			
+
 			if (paymentResult instanceof PaymentResult.Success success) {
-				paymentTransitionService.apply(payment, PaymentEvent.CAPTURED_SUCCESS);
+				paymentTransitionService.apply(payment, PaymentEvent.CAPTURED_SUCCESS, "Capture succeeded");
 				payment.setCapturedAt(Instant.now());
 				order.setOrderStatus(OrderStatus.PAID);
 			} else if (paymentResult instanceof PaymentResult.Failure failer) {
-				paymentTransitionService.apply(payment, PaymentEvent.CAPTURED_FAIL);
+				paymentTransitionService.apply(payment, PaymentEvent.CAPTURED_FAIL, "Capture failed");
 				payment.setErrorCode(failer.errorCode());
 				payment.setErrorDescription(failer.errorDescription());
 			}
 		} else {
-			
-			paymentTransitionService.apply(payment, PaymentEvent.AUTHORIZED_FAIL);
+			paymentTransitionService.apply(payment, PaymentEvent.AUTHORIZED_FAIL, "Bank authorization rejected");
 			payment.setErrorCode(errorCode);
 			payment.setErrorDescription(errorDescription);
 		}

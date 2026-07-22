@@ -12,8 +12,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 
 @Component
@@ -29,38 +27,36 @@ public class BankCallbackSimulator {
 	
 	@Scheduled(fixedDelayString = "${payment.simulator.poll-interval-ms:5000}")
 	public void processCallbacks() {
-		
-		
 		Instant globalWindow = Instant.now().minusSeconds(1);
-		
-		List<Payment>
-				candidates = paymentRepository.findByStatusAndCreatedAtBefore(PaymentStatus.AUTHORIZING, globalWindow);
-		
+
+		List<Payment> candidates = paymentRepository.findByStatusAndCreatedAtBefore(PaymentStatus.AUTHORIZING, globalWindow);
+
+		log.info("Simulator tick — found {} AUTHORIZING payment(s)", candidates.size());
+
 		if (candidates.isEmpty()) return;
-		
+
 		for (Payment payment : candidates) {
 			simulateCallback(payment);
 		}
 	}
 	
 	private void simulateCallback(Payment payment) {
-		
 		SimulatorConfig.MethodSimulatorConfig methodConfig = simulatorConfig.configFor(payment.getMethod());
-		
-		LocalDateTime dueAt = dueAt(payment, methodConfig);
-		
-		if (LocalDateTime.now().isBefore(dueAt)) {
+
+		Instant dueAt = dueAt(payment, methodConfig);
+
+		if (Instant.now().isBefore(dueAt)) {
+			log.info("Simulator: payment [{}] not due yet, due at {}", payment.getId(), dueAt);
 			return;
 		}
-		
+
 		ChaosMode chaosMode = simulatorConfig.getChaosMode();
-		
+		log.info("Simulator: processing payment [{}] with chaosMode={}", payment.getId(), chaosMode);
+
 		switch (chaosMode) {
 			case SUCCESS -> resolve(payment, true);
 			case FAILURE -> resolve(payment, false);
-			case TIMEOUT -> {
-				log.debug("BANKCallbank simulator : Payment Timed out");
-			}
+			case TIMEOUT -> log.info("Simulator: payment [{}] timed out (TIMEOUT mode)", payment.getId());
 			case NORMAl, SLOW -> resolve(payment, shouldApprove(payment, methodConfig));
 		}
 	}
@@ -83,18 +79,16 @@ public class BankCallbackSimulator {
 		return bucket < methodConfig.getSuccessRate();
 	}
 	
-	private LocalDateTime dueAt(Payment payment, SimulatorConfig.MethodSimulatorConfig methodSimulatorConfig) {
-		
+	private Instant dueAt(Payment payment, SimulatorConfig.MethodSimulatorConfig methodSimulatorConfig) {
 		int range = methodSimulatorConfig.getMaxDelaySeconds() - methodSimulatorConfig.getMinDelaySeconds();
-		
+
 		int delaySeconds =
 				methodSimulatorConfig.getMinDelaySeconds() + Math.abs(payment.getId().hashCode()) % (range + 1);
-		
+
 		if (simulatorConfig.getChaosMode() == ChaosMode.SLOW) {
 			delaySeconds *= 2;
 		}
-		
-		
-		return LocalDateTime.ofInstant(payment.getCreatedAt().plusSeconds(delaySeconds), ZoneOffset.UTC);
+
+		return payment.getCreatedAt().plusSeconds(delaySeconds);
 	}
 }
