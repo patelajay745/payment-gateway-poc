@@ -51,9 +51,10 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Override
 	public OrderResponse createOrder(CreateOrderRequest request) {
-		
-		
-		UUID merchantId = Utils.getCurrentMerchant().getId();
+
+
+//		UUID merchantId = Utils.getCurrentMerchant().getId();
+		UUID merchantId = UUID.fromString("e51aedc1-95e7-443b-953b-168054c85058");
 		
 		
 		checkMerchantIdAndReceipt(merchantId, request.receipt());
@@ -93,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
 			throw new BusinessRuleViolationException("ORDER_CANCEL", "Order can't be cancel now");
 		}
 		
-		order.updateOrderStatus(OrderStatus.CANCELLED);
+		order.setOrderStatus(OrderStatus.CANCELLED);
 	}
 	
 	@Override

@@ -4,10 +4,7 @@ import com.example.paymentgateway.common.entity.BaseEntity;
 import com.example.paymentgateway.common.entity.Money;
 import com.example.paymentgateway.common.enums.OrderStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -25,6 +22,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Setter
 public class OrderRecord extends BaseEntity {
 	
 	@Id
@@ -55,12 +53,4 @@ public class OrderRecord extends BaseEntity {
 	
 	@Column(nullable = false)
 	private Instant expires;
-	
-	public void updateOrderStatus(OrderStatus orderStatus) {
-		this.orderStatus = orderStatus;
-	}
-	
-	public void setAttempts(int attempts) {
-		this.attempts = attempts;
-	}
 }

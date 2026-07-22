@@ -57,7 +57,7 @@ public class PaymentServiceImpl implements PaymentService {
 					                                                              order.getOrderStatus());
 		}
 		
-		order.updateOrderStatus(OrderStatus.ATTEMPTED);
+		order.setOrderStatus(OrderStatus.ATTEMPTED);
 		order.setAttempts(order.getAttempts() + 1);
 		
 		Payment payment = Payment
@@ -66,6 +66,7 @@ public class PaymentServiceImpl implements PaymentService {
 				                  .merchantId(merchant.getId())
 				                  .amount(order.getAmount())
 				                  .status(PaymentStatus.CREATED)
+				                  .idempotencyKey(UUID.randomUUID().toString())
 				                  .method(request.method())
 				                  .methodDetails(request.methodDetails())
 				                  .build();
@@ -138,6 +139,7 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 	
 	@Override
+	@Transactional
 	public void resolveAuthorization(UUID paymentId, boolean approve, String bankRef, String errorCode,
 	                                 String errorDescription) {
 		
@@ -164,11 +166,21 @@ public class PaymentServiceImpl implements PaymentService {
 			
 			if (paymentResult instanceof PaymentResult.Success success) {
 				paymentTransitionService.apply(payment, PaymentEvent.CAPTURED_SUCCESS);
-			} else {
+				payment.setCapturedAt(Instant.now());
+				order.setOrderStatus(OrderStatus.PAID);
+			} else if (paymentResult instanceof PaymentResult.Failure failer) {
 				paymentTransitionService.apply(payment, PaymentEvent.CAPTURED_FAIL);
+				payment.setErrorCode(failer.errorCode());
+				payment.setErrorDescription(failer.errorDescription());
 			}
 		} else {
-		
+			
+			paymentTransitionService.apply(payment, PaymentEvent.AUTHORIZED_FAIL);
+			payment.setErrorCode(errorCode);
+			payment.setErrorDescription(errorDescription);
 		}
+		
+		paymentRepository.save(payment);
+		orderRepository.save(order);
 	}
 }

@@ -4,7 +4,7 @@ import com.example.paymentgateway.common.enums.PaymentStatus;
 import com.example.paymentgateway.payment.entity.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -15,5 +15,5 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID> {
 	
 	Optional<Payment> findByIdAndMerchantId(UUID paymentId, UUID id);
 	
-	List<Payment> findByStatusAndCreatedAtBefore(PaymentStatus paymentStatus, LocalDateTime globalWindows);
+	List<Payment> findByStatusAndCreatedAtBefore(PaymentStatus paymentStatus, Instant globalWindows);
 }

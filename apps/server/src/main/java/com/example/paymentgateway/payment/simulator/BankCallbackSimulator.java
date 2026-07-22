@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
@@ -28,7 +29,9 @@ public class BankCallbackSimulator {
 	
 	@Scheduled(fixedDelayString = "${payment.simulator.poll-interval-ms:5000}")
 	public void processCallbacks() {
-		LocalDateTime globalWindow = LocalDateTime.now().minusSeconds(1);
+		
+		
+		Instant globalWindow = Instant.now().minusSeconds(1);
 		
 		List<Payment>
 				candidates = paymentRepository.findByStatusAndCreatedAtBefore(PaymentStatus.AUTHORIZING, globalWindow);
