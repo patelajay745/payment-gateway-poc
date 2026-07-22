@@ -7,7 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.jspecify.annotations.Nullable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -19,7 +25,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AppUsers extends BaseEntity {
+public class AppUsers extends BaseEntity implements UserDetails {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -37,4 +43,21 @@ public class AppUsers extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "merchant_id")
 	private Merchant merchant;
+	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(
+				new SimpleGrantedAuthority("ROLE_" + role)
+		);
+	}
+	
+	@Override
+	public @Nullable String getPassword() {
+		return passwordHashed;
+	}
+	
+	@Override
+	public String getUsername() {
+		return email;
+	}
 }

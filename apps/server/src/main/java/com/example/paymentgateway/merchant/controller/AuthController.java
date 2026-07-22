@@ -1,6 +1,8 @@
 package com.example.paymentgateway.merchant.controller;
 
+import com.example.paymentgateway.merchant.dto.request.MerchantLoginRequest;
 import com.example.paymentgateway.merchant.dto.request.MerchantSignupRequest;
+import com.example.paymentgateway.merchant.dto.response.MerchantLoginResponse;
 import com.example.paymentgateway.merchant.dto.response.MerchantSignupResponse;
 import com.example.paymentgateway.merchant.service.AuthService;
 import jakarta.validation.Valid;
@@ -23,5 +25,10 @@ public class AuthController {
 	public ResponseEntity<MerchantSignupResponse> registerUser(@RequestBody @Valid MerchantSignupRequest request) {
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(authService.registerMerchant(request));
+	}
+	
+	@PostMapping("/login")
+	public ResponseEntity<MerchantLoginResponse> loginUser(@RequestBody @Valid MerchantLoginRequest request) {
+		return ResponseEntity.status(200).body(authService.loginMerchant(request));
 	}
 }
